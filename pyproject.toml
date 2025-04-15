@@ -1,0 +1,26 @@
+[project]
+name = "Vinyl_Models"
+version = "0.1.0"
+description = "Definition of the Vinyl DB schema and corresponding models"
+authors = [
+    { name="Jakub Szypicyn", email="jakub.m.szypicyn@gmail.com" }
+]
+readme = "README.md"
+license = { file="LICENSE" }
+dependencies = [
+    "pytest",
+    "sqlalchemy"
+]
+requires-python = ">=3.11"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["vinyl_models"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = ["tests"]
