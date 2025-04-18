@@ -1,7 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS prod;
+create schema if not exists prod;
 
-GRANT USAGE ON SCHEMA prod TO jakub_admin;
-
-GRANT CREATE ON SCHEMA prod TO jakub_admin;
-
-ALTER ROLE prod_user SET search_path TO prod;
+grant all on schema prod to jakub_admin;

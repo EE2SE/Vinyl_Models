@@ -5,9 +5,7 @@ create table if not exists prod.record (
     release_year integer not null,
     purchase_date timestamp not null,
     purchase_price_id int,
-    create_dt timestamp default now()
-)
+    create_dt timestamp default now(),
 
--- Add primary key constraint
-alter table prod.record
-add constraint pk__record primary key (id);
+    constraint pk__record primary key (id)
+);
