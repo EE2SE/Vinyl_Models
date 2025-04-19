@@ -1,2 +1,3 @@
-# Vinyl_Models
-Database and Models for the Vinyl Manager Project
+# Deploying Changes Locally and Pushing to Remote
+
+follow https://supabase.com/docs/guides/deployment/database-migrations
