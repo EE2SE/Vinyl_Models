@@ -42,7 +42,7 @@ jobs:
       - name: Lint Python code
         run: |
           ruff check .
-          ruff formnat .
+          ruff format .
 
       - name: Lint SQL files
         run: |
