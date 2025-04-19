@@ -1,49 +1,21 @@
 #!/bin/bash
 
-VENV_DIR="venv"
-PYPROJECT_FILE="pyproject.toml"
+set -e  # Exit on any error
 
-if [ ! -f "$PYPROJECT_FILE" ]; then
-    echo "❌ No pyproject.toml found in the current directory."
-    exit 1
+# 1. Destroy existing virtual environment if it exists
+if [ -d "venv" ]; then
+    echo "Removing existing virtual environment..."
+    rm -rf venv
 fi
 
-# Check if virtual environment already exists
-if [ -d "$VENV_DIR" ]; then
-    echo "✅ Virtual environment already exists at ./$VENV_DIR"
-else
-    echo "🚀 Creating virtual environment..."
-    python3 -m venv "$VENV_DIR"
+# 2. Create a new virtual environment
+echo "Creating new virtual environment..."
+python -m venv venv
 
-    if [ $? -eq 0 ]; then
-        echo "✅ Virtual environment created successfully at ./$VENV_DIR"
-    else
-        echo "❌ Failed to create virtual environment."
-        exit 1
-    fi
+# 3. Activate the virtual environment and install dependencies from pyproject.toml
+echo "Activating virtual environment and installing dependencies..."
+source venv/bin/activate
+pip install --upgrade pip
+pip install .
 
-    # Activate venv and install dependencies
-    echo "📦 Installing dependencies from pyproject.toml..."
-    source "$VENV_DIR/bin/activate"
-
-    # Upgrade pip and install dependencies using requirements from pyproject.toml
-    pip install --upgrade pip
-
-    # Extract dependencies
-    DEPS=$(python3 - <<EOF
-import tomllib
-with open("$PYPROJECT_FILE", "rb") as f:
-    deps = tomllib.load(f)["project"].get("dependencies", [])
-    print(" ".join(deps))
-EOF
-)
-
-    if [ -n "$DEPS" ]; then
-        pip install $DEPS
-        echo "✅ Dependencies installed: $DEPS"
-    else
-        echo "ℹ️ No dependencies found in pyproject.toml."
-    fi
-    source "$VENV_DIR/bin/activate"
-fi
-
+echo "Done. Virtual environment set up with dependencies from pyproject.toml."
