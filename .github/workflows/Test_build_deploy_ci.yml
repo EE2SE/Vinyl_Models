@@ -37,12 +37,12 @@ jobs:
 
       - name: Install linters
         run: |
-          pip install sqlfluff black flake8
+          pip install sqlfluff ruff
 
       - name: Lint Python code
         run: |
-          black --check .
-          flake8 .
+          ruff check .
+          ruff formnat .
 
       - name: Lint SQL files
         run: |
