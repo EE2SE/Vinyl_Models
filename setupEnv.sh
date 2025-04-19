@@ -16,6 +16,6 @@ python -m venv venv
 echo "Activating virtual environment and installing dependencies..."
 source venv/bin/activate
 pip install --upgrade pip
-pip install .
+pip install -e .[dev]
 
 echo "Done. Virtual environment set up with dependencies from pyproject.toml."
