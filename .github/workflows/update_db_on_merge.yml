@@ -36,6 +36,3 @@ jobs:
           supabase db push \
             --project-ref ${{ secrets.PROJECT_REF }} \
             --db-password $SUPABASE_DB_PASSWORD
-
-      - name: Deploy Supabase Migrations
-        run: supabase db push
