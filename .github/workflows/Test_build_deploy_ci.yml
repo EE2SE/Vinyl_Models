@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
@@ -33,7 +33,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.10'
 
       - name: Install linters
         run: |
@@ -48,8 +48,6 @@ jobs:
         run: |
           sqlfluff lint . --dialect postgres
 
-
-
   test:
     runs-on: ubuntu-latest
     needs: lint
@@ -63,6 +61,8 @@ jobs:
       - run: supabase db reset
 
       - name: Run unit tests
+        env:
+          TEST_DB_URL: ${{ secrets.TEST_DB_URL }}
         run: |
           pytest tests/
 
@@ -76,7 +76,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.10'
 
       - name: Install build tools
         run: |
