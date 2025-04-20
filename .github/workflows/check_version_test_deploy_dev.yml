@@ -119,7 +119,7 @@ jobs:
   deploy-testpypi:
     name: Publish Dev Package to TestPyPI
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, check-version]
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
