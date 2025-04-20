@@ -23,6 +23,8 @@ dev = [
     "dotenv",
 ]
 
+dynamic = ["version"]
+
 [tool.hatch.version]
 path = "vinyl_models/__init__.py"
 
