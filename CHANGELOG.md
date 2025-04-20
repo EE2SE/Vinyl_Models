@@ -1,3 +1,8 @@
+## 0.3.0 20/04/2025
+### Fixed
+- Auto db deployment when merging to main
+- Version check
+
 ## 0.2.0 20/04/2025
 ### Added
 - Full schema
