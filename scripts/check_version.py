@@ -8,9 +8,9 @@ def main(pr_version: str, main_version: str):
     main_v = V(main_version)
 
     if pr_v <= main_v:
-        sys.exit(f"❌ Version must be greater than main (got {pr_v} <= {main_v})")
+        sys.exit(f"Version must be greater than main (got {pr_v} <= {main_v})")
 
-    print(f"✅ Version bump OK: {pr_v} > {main_v}")
+    print(f"Version bump OK: {pr_v} > {main_v}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

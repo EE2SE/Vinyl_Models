@@ -18,14 +18,14 @@ jobs:
       - name: Get version on PR branch
         id: pr_version
         run: |
-          version=$(grep '__version__' your_package/__init__.py | cut -d '"' -f2)
+          version=$(grep '__version__' vinyl_models/__init__.py | cut -d '"' -f2)
           echo "version=$version" >> $GITHUB_OUTPUT
 
       - name: Get version on main branch
         id: main_version
         run: |
           git fetch origin main
-          main_version=$(git show origin/main:your_package/__init__.py | grep '__version__' | cut -d '"' -f2)
+          main_version=$(git show origin/main:vinyl_models/__init__.py | grep '__version__' | cut -d '"' -f2)
           echo "version=$main_version" >> $GITHUB_OUTPUT
 
       - name: Install dependencies
