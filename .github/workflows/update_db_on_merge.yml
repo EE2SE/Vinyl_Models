@@ -35,12 +35,12 @@ jobs:
         run: |
           supabase link \
             --project-ref ${{ secrets.PROJECT_REF }} \
-            --db-password $SUPABASE_DB_PASSWORD
+            --password $SUPABASE_DB_PASSWORD
 
       - name: Deploy
         env: 
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
         run: |
           supabase db push \
-          --db-password ${{ secrets.SUPABASE_DB_PASSWORD }} \
+          --password ${{ secrets.SUPABASE_DB_PASSWORD }} \
       
