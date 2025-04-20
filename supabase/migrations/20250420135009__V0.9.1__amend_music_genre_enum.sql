@@ -25,8 +25,8 @@ CREATE TYPE prod.music_genre_cap AS ENUM (
 --    You need to update genre column and convert values accordingly
 
 ALTER TABLE prod.record
-    ALTER COLUMN genre TYPE prod.music_genre_cap
-    USING UPPER(genre::text)::prod.music_genre_cap;
+ALTER COLUMN genre TYPE prod.music_genre_cap
+USING UPPER(genre::text)::prod.music_genre_cap;
 
 -- 3. Drop the old enum
 DROP TYPE prod.music_genre;

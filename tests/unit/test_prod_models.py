@@ -1,11 +1,9 @@
 import vinyl_models.prod_models as vmd
-from sqlalchemy import text
+
 
 def test_fetch_record(db_session):
     # Query a Record from the database
-    record = db_session.query(vmd.Record).where(
-        vmd.Record.id == 1
-    ).first()
+    record = db_session.query(vmd.Record).where(vmd.Record.id == 1).first()
     assert record is not None, "No Record found in the database"
 
     # Validate some fields of the Record model
