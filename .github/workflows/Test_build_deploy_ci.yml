@@ -23,6 +23,38 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e .[dev]
 
+  check-version:
+    name: Ensure version bump
+    runs-on: ubuntu-latest
+    needs: validate_dependencies
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # we need history to compare with main
+
+      - name: Get version on PR branch
+        id: pr_version
+        run: |
+          version=$(grep '__version__' vinyl_models/__init__.py | cut -d '"' -f2)
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: Get version on main branch
+        id: main_version
+        run: |
+          git fetch origin main
+          main_version=$(git show origin/main:vinyl_models/__init__.py | grep '__version__' | cut -d '"' -f2)
+          echo "version=$main_version" >> $GITHUB_OUTPUT
+
+      - name: Install dependencies
+        run: pip install packaging
+
+      - name: Run version comparison
+        run: |
+          python scripts/check_version.py \
+            "${{ steps.pr_version.outputs.version }}" \
+            "${{ steps.main_version.outputs.version }}"
+
   lint:
     runs-on: ubuntu-latest
     needs: validate_dependencies
@@ -50,7 +82,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: lint
+    needs: validate_dependencies
     steps:
       - uses: actions/checkout@v3
       - uses: supabase/setup-cli@v1
