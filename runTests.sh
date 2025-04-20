@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e  # Exit on any error
-
 # 1. Destroy existing virtual environment if it exists
 if [ -d "venv" ]; then
     echo "Enabling virtual env..."
@@ -19,6 +17,8 @@ docker volume rm supabase_db_VinylDB
 
 echo "Starting supabase engine and seeding..."
 supabase start
+
+supabase db reset
 
 echo "Running tests..."
 pytest tests

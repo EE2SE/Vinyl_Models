@@ -17,45 +17,48 @@ def camel_to_snake(name: str) -> str:
 
 
 class MusicGenre(enum.Enum):
-    ROCK = "rock"
-    POP = "pop"
-    JAZZ = "jazz"
-    HIP_HOP = "hip_hop"
-    ELECTRONIC = "electronic"
-    CLASSICAL = "classical"
-    BLUES = "blues"
-    REGGAE = "reggae"
-    COUNTRY = "country"
-    METAL = "metal"
-    FOLK = "folk"
-    PUNK = "punk"
-    SOUL = "soul"
-    FUNK = "funk"
-    RNB = "rnb"
-    TECHNO = "techno"
-    HOUSE = "house"
-    INDIE = "indie"
-    ALTERNATIVE = "alternative"
-    UNSPECIFIED = "unspecified"
+    ROCK = "ROCK"
+    POP = "POP"
+    JAZZ = "JAZZ"
+    HIP_HOP = "HIP_HOP"
+    ELECTRONIC = "ELECTRONIC"
+    CLASSICAL = "CLASSICAL"
+    BLUES = "BLUES"
+    REGGAE = "REGGAE"
+    COUNTRY = "COUNTRY"
+    METAL = "METAL"
+    FOLK = "FOLK"
+    PUNK = "PUNK"
+    SOUL = "SOUL"
+    FUNK = "FUNK"
+    RNB = "RNB"
+    TECHNO = "TECHNO"
+    HOUSE = "HOUSE"
+    INDIE = "INDIE"
+    ALTERNATIVE = "ALTERNATIVE"
+    UNSPECIFIED = "UNSPECIFIED"
 
 
 class Base(DeclarativeBase):
     @declared_attr.directive
     def __tablename__(cls) -> str:
         return camel_to_snake(cls.__name__)
+    @declared_attr
+    def __table_args__(cls):
+        return {"schema": "prod"}
 
+class IdMixin:
     id: Mapped[int] = mapped_column(primary_key=True)
 
-
-class Currency(Base):
+class Currency(IdMixin,Base):
     symbol: Mapped[str] = mapped_column(String)
     name: Mapped[str] = mapped_column(String)
     create_dt: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP)
 
 
-class CurrencyExchange(Base):
-    from_curr_id: Mapped[int] = mapped_column(ForeignKey("currency.id"))
-    to_curr_id: Mapped[int] = mapped_column(ForeignKey("currency.id"))
+class CurrencyExchange(IdMixin,Base):
+    from_curr_id: Mapped[int] = mapped_column(ForeignKey("prod.currency.id"))
+    to_curr_id: Mapped[int] = mapped_column(ForeignKey("prod.currency.id"))
     exchange_rate: Mapped[float] = mapped_column(Float)
     update_dt: Mapped[Optional[TIMESTAMP]] = mapped_column(TIMESTAMP)
     create_dt: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP)
@@ -68,15 +71,15 @@ class CurrencyExchange(Base):
     )
 
 
-class Price(Base):
+class Price(IdMixin,Base):
     amount: Mapped[int] = mapped_column(Integer)
-    currency_id: Mapped[int] = mapped_column(ForeignKey("currency.id"))
+    currency_id: Mapped[int] = mapped_column(ForeignKey("prod.currency.id"))
     create_dt: Mapped[Optional[TIMESTAMP]] = mapped_column(TIMESTAMP)
 
     currency: Mapped["Currency"] = relationship("Currency")
 
 
-class Record(Base):
+class Record(IdMixin,Base):
     artist: Mapped[str] = mapped_column(String, nullable=False)
     album: Mapped[str] = mapped_column(String, nullable=False)
     genre: Mapped[MusicGenre] = mapped_column(
@@ -85,13 +88,13 @@ class Record(Base):
     buy_year: Mapped[int] = mapped_column(Integer, nullable=False)
     buy_month: Mapped[Optional[int]] = mapped_column(Integer)
     buy_price_id: Mapped[int] = mapped_column(
-        ForeignKey("prod.buy_price.id"), nullable=False
+        ForeignKey("prod.price.id"), nullable=False
     )
     discogs_id: Mapped[Optional[int]] = mapped_column(Integer)
     create_dt: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP, nullable=False)
 
     # Relationships to be defined based on your model structure
-    buy_price: Mapped["Price"] = relationship("Price")
+    buy_price: Mapped["Price"] = relationship("Price", foreign_keys=[buy_price_id])
     # discogs: Mapped['Discogs'] = relationship('Discogs')  # Uncomment when Discogs model is defined
 
     # Backrefs from other tables like Availability, Track, and PriceHistory
@@ -104,7 +107,7 @@ class Record(Base):
     )
 
 
-class Track(Base):
+class Track(IdMixin,Base):
     record_id: Mapped[int] = mapped_column(ForeignKey("prod.record.id"), nullable=False)
     number: Mapped[int] = mapped_column(Integer, nullable=False)
     name: Mapped[str] = mapped_column(String, nullable=False)
@@ -114,7 +117,7 @@ class Track(Base):
     record: Mapped["Record"] = relationship("Record", back_populates="tracks")
 
 
-class Availibility(Base):
+class Availibility(IdMixin,Base):
     record_id: Mapped[int] = mapped_column(ForeignKey("prod.record.id"), nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False)
     update_dt: Mapped[Optional[TIMESTAMP]] = mapped_column(TIMESTAMP)
@@ -123,7 +126,7 @@ class Availibility(Base):
     record: Mapped["Record"] = relationship("Record", back_populates="availibility")
 
 
-class PriceHistory(Base):
+class PriceHistory(IdMixin,Base):
     record_id: Mapped[int] = mapped_column(ForeignKey("prod.record.id"), nullable=False)
     price_id: Mapped[int] = mapped_column(ForeignKey("prod.price.id"), nullable=False)
     price_dt: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP, nullable=False)

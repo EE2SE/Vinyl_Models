@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -e  # Exit on any error
+set -eE  # Exit on error and propagate ERR trap
+trap 'echo "Script failed at line $LINENO. Exiting."' ERR
 
 # 1. Destroy existing virtual environment if it exists
 if [ -d "venv" ]; then
@@ -16,6 +17,6 @@ python -m venv venv
 echo "Activating virtual environment and installing dependencies..."
 source venv/bin/activate
 pip install --upgrade pip
-pip install -e .[dev]
+pip install -e ".[dev]"
 
 echo "Done. Virtual environment set up with dependencies from pyproject.toml."

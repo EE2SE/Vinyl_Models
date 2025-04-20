@@ -20,8 +20,8 @@ insert into prod.record (
     artist, album, genre, buy_year,
     buy_month, buy_price_id
 ) values
-('Radiohead', 'OK Computer', 'rock'::prod.music_genre, 2020, 6, 1),
-('Daft Punk', 'Discovery', 'electronic'::prod.music_genre, 2023, 3, 2);
+('Radiohead', 'OK Computer', 'ROCK'::prod.music_genre, 2020, 6, 1),
+('Daft Punk', 'Discovery', 'ELECTRONIC'::prod.music_genre, 2023, 3, 2);
 
 insert into prod.track (
     record_id, number, name, spotify_uri
