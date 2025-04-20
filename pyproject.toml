@@ -1,7 +1,7 @@
 [project]
 name = "vinyl-models"
-version = "0.1.0"
 description = "Vinyl DB Setup"
+dynamic = ["version"]
 authors = [
     { name = "jakub", email = "jakub.m.szypicyn@gmail.com" }
 ]
@@ -23,6 +23,9 @@ dev = [
     "sqlfluff",
     "dotenv",
 ]
+
+[tool.hatch.version]
+path = "vinyl_models/__init__.py"
 
 [tool.hatch.build]
 packages = ["vinyl_models"]
