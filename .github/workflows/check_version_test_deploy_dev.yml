@@ -155,6 +155,7 @@ jobs:
       - name: Publish to TestPyPI
         working-directory: temp_package
         env:
-          HATCH_INDEX_AUTH: "pypi=${{ secrets.TEST_PYPI_TOKEN }}"
-        run: hatch publish --repo testpypi
-
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_TOKEN }}
+        run: |
+          twine upload --repository-url https://test.pypi.org/legacy/ dist/*
