@@ -1,8 +1,6 @@
 name: CI_Test_Lint_Deploy
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -117,3 +115,46 @@ jobs:
       - name: Build package
         run: |
           python -m build
+
+  deploy-testpypi:
+    name: Publish Dev Package to TestPyPI
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install hatch and twine
+        run: pip install hatch twine
+
+      - name: Get dynamic dev version
+        id: get_version
+        run: |
+          base_version=$(hatch version)
+          timestamp=$(date +%s)
+          dev_version="${base_version}.dev${timestamp}"
+          echo "dev_version=$dev_version" >> $GITHUB_ENV
+          echo "dev_version=$dev_version" >> $GITHUB_OUTPUT
+
+      - name: Inject dev version into temp package copy
+        run: |
+          mkdir temp_package
+          cp -r vinyl_models pyproject.toml README.md temp_package/
+          sed -i "s/__version__ = .*/__version__ = \"${{ env.dev_version }}\"/" temp_package/vinyl_models/__init__.py
+
+      - name: Build dev package
+        working-directory: temp_package
+        run: hatch build
+
+      - name: Publish to TestPyPI
+        working-directory: temp_package
+        env:
+          HATCH_INDEX_AUTH: "pypi=${{ secrets.TEST_PYPI_TOKEN }}"
+        run: hatch publish --repo testpypi
+
