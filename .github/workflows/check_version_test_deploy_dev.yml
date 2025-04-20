@@ -4,7 +4,8 @@ on:
   pull_request:
     branches: [ main ]
 
-jobs:
+jobs: 
+
   validate_dependencies:
     runs-on: ubuntu-latest
     steps:
