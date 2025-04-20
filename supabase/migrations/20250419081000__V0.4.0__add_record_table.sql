@@ -34,6 +34,9 @@ create table if not exists prod.record (
     create_dt timestamp default now(),
 
     constraint pk__record primary key (id),
-    constraint fk__record__buy_price foreign key (buy_price_id) references prod.buy_price
-    -- constraint fk__record__discogs foreign key (discogs_id) references prod.discogs
+    constraint fk__record__buy_price foreign key (
+        buy_price_id
+    ) references prod.buy_price
+    -- constraint fk__record__discogs foreign key 
+    -- (discogs_id) references prod.discogs
 );

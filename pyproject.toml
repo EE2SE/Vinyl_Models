@@ -1,26 +1,34 @@
 [project]
-name = "image-search"
+name = "vinyl-models"
 version = "0.1.0"
-description = "Image Search with Supabase Vector"
+description = "Vinyl DB Setup"
 authors = [
-    { name = "thorwebdev", email = "thor@supabase.io" }
+    { name = "jakub", email = "jakub.m.szypicyn@gmail.com" }
 ]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = [
     "sentence-transformers>=2.2.2,<3.0.0",
     "vecs>=0.2.4,<0.3.0",
     "matplotlib>=3.7.1,<4.0.0",
-    "sqlalchemy",
-    "supabase"
+    "sqlalchemy>=1.4.0,<3.0.0",   # Be explicit on compatibility
+    "supabase"                   # Add version constraint if needed
 ]
 
-[project.scripts]
-seed = "image_search.main:seed"
-search = "image_search.main:search"
+[project.optional-dependencies]
+dev = [
+    "ruff",                      # For linting
+    "pytest",
+    "ipython",
+    "sqlfluff",
+    "dotenv",
+]
 
 [tool.hatch.build]
-packages = ["image_search"]
+packages = ["vinyl_models"]
+
+[tool.hatch.metadata]
+allow-implicit-optional-dependencies = true
 
 [build-system]
 requires = ["hatchling"]

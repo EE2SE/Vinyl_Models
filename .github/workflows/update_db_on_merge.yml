@@ -1,0 +1,21 @@
+name: update_db_on_merge
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy_schema:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+
+        - name: Initialise Supabase CLI
+          uses: supabase/setup-cli@v1
+          with:
+            version: latest
+        
+        - name: Push schema to Supabase
+          run: supabase db push
+

@@ -15,6 +15,8 @@ create table if not exists prod.price (
     create_dt timestamp default now(),
 
     constraint pk__price primary key (id),
-    constraint fk__price__currency foreign key (currency_id) references prod.currency(id),
+    constraint fk__price__currency foreign key (
+        currency_id
+    ) references prod.currency (id),
     constraint ck__price_non_neg_amount check (amount >= 0)
 );
