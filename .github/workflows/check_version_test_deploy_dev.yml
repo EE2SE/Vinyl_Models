@@ -5,6 +5,39 @@ on:
     branches: [ main ]
 
 jobs:
+  tag-version:
+    name: Tag with v<version>
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # required to create and push tags
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Hatch
+        run: pip install hatch
+
+      - name: Get version
+        id: get_version
+        run: |
+          version=$(hatch version)
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: Tag and push using PAT
+        env:
+            GH_PAT: ${{ secrets.GH_TOKEN }}
+        run: |
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+            git tag "v${{ steps.get_version.outputs.version }}"
+            git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
+            git push origin "v${{ steps.get_version.outputs.version }}"
+
   validate_dependencies:
     runs-on: ubuntu-latest
     steps:
