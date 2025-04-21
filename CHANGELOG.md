@@ -1,3 +1,7 @@
+## 0.5.0 21/04/2025
+### Fixed
+- Provided access to anon/service_roles via Supabase API to prod schema
+
 ## 0.4.2 21/04/2025
 ### Added
 - Readme
